@@ -1,0 +1,800 @@
+<!doctype html>
+<html lang="no">
+    <head>
+        <title>Regningsmal</title>
+        <meta charset = "UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <style>
+            body {
+                margin: 8px;
+                padding: 8px;
+                font-family: Arial, Helvetica, sans-serif;
+            }
+
+            table{
+                border-collapse: collapse; /*fjerner mellomrom mellom rader*/
+                margin-top: 20px;
+                text-align: center;
+            }
+            th{
+                border: 2px solid black;
+                padding: 5px;
+            }
+            td{
+                border: 2px solid black;
+                padding: 5px;
+            }
+
+            #KjøreFormsSide {
+                display: none;
+            }
+
+            #RegnigsFormsSide {
+                display: block;
+            }
+
+            input {
+                margin-bottom: 24px;
+            }
+
+            input:not(.NoCSS) {
+                width: 200px;
+                height: 30px;
+                border: none;
+                border-bottom: orangered 1px solid;
+                background-color: whitesmoke;
+            }
+
+            #KjørNavnInput {
+                width: 200px;
+                height: 60px;
+                border: none;
+                border-bottom: orangered 1px solid;
+                background-color: whitesmoke;
+            }
+
+            select {
+                margin-bottom: 24px;
+                width: 205px;
+                height: 30px;
+                border: none;
+                border-bottom: orangered 1px solid;
+                background-color: whitesmoke;
+            }
+
+            p:not(.info) {
+                font-weight: bold;
+            }
+            
+            p {
+                line-height: 2 ;
+                margin-top: 0 ;
+                margin-bottom: 0 ;
+            }
+
+            .NoCSS:hover {
+                cursor: pointer;
+            }
+
+            button:hover {
+                cursor: pointer;
+            }
+
+            label:hover {
+                cursor: pointer;
+            }
+
+            input[type=date]:hover {
+                cursor: pointer;
+            }
+
+            select:hover {
+                cursor: pointer;
+            }
+
+            button {
+                width: 130px;
+                height: 30px;
+                border-radius: 10px;
+                border: none;
+                background-image: linear-gradient(to bottom right, red , rgb(255, 115, 0));
+                color: white;
+            }
+
+            .Mindre {
+                width: 70px;
+                margin-right: 8px;
+                height: 30px;
+                background-color: rgb(97, 97, 97);
+                background-image: none;
+            }
+
+            #Slett {
+                background-image: linear-gradient(to bottom right, red , rgb(219, 0, 0));
+            }
+
+            #KjøreturForm {
+                padding: 8px;
+            }
+
+            table {
+                max-width: 1200px;
+            }
+
+            #SendMail {
+                margin-top: 8px;
+                padding: 4px;
+            }
+
+            #cancelButton {
+                background-color: rgb(0, 102, 255);
+                background-image: none;
+            }
+
+            input[type=checkbox] {
+                height: 24px;
+                width: 24px;
+            }
+
+            input[type=radio] {
+                height: 16px;
+                width: 16px;
+            }
+
+            #Leggtilkjøreturellerlagreendringerknapp {
+                margin-bottom: 8px;
+            }
+
+            input[type=file]::file-selector-button {
+                width: 130px;
+                height: 30px;
+                border-radius: 10px;
+                border: none;
+                background-image: linear-gradient(to bottom right, red , rgb(255, 115, 0));
+                color: white;
+            }
+
+            input[type=file]::file-selector-button:hover {
+                cursor: pointer;
+            }
+
+            #LittMellomromTakk {
+                margin-top: 16px;
+            }
+
+            #infopåtoppen {
+                max-width: 600px;
+            }
+
+            #OppdagFeil {
+                margin-top: 8px;
+            }
+
+            #NBTekst {
+                margin-top: 16px;
+            }
+
+            #RedTekst {
+                color: red;
+            }
+
+            @media only screen and (max-width: 768px) {
+                :root {
+                    --SkriftStorrelse: 21px;
+                }
+                
+                p {
+                    font-size: var(--SkriftStorrelse);
+                }
+
+                label {
+                    font-size: var(--SkriftStorrelse);
+                    margin-right: 16px;
+                    padding: 8px;
+                }
+
+                input[type=radio] {
+                height: 24px;
+                width: 24px;
+                }
+
+                input:not(.NoCSS) {
+                    width: 300px;
+                    height: 50px;
+                    font-size: var(--SkriftStorrelse);
+                }
+
+                input[type=file]::file-selector-button {
+                    width: 150px;
+                    height: 50px;
+                    font-size: var(--SkriftStorrelse);
+                }
+
+                input[type=file] {
+                    font-size: var(--SkriftStorrelse);
+                }
+
+                button {
+                    width: 150px;
+                    height: 50px;
+                    font-size: var(--SkriftStorrelse);
+                }
+
+                h3 {
+                    font-size: 26px;
+                }
+
+                #KjørNavnInput {
+                    font-size: var(--SkriftStorrelse);
+                    width: 300px;
+                    height: 80px;
+                }
+
+                select {
+                    font-size: var(--SkriftStorrelse);
+                    width: 300px;
+                    height: 60px;
+                }
+
+                .Mindre {
+                    width: 100px;
+                    margin-right: 8px;
+                    height: 50px;
+                }
+            }
+        </style>
+    </head>
+    <body>
+    <div id="Hoved">
+        <h1>Regningsmal</h1>
+        <div id="infopåtoppen">
+        <p class="info">Fyll ut skjemaet og trykk "Last ned PDF", du vil da få laget en PDF versjon av tabellen som ligger nederst på siden. Videre trykker du på "Send til Per Olav" som vil lage en epost <span id="RedTekst">hvor du kun trenger å legge til PDFen som vedlegg.</span></p>
+        <p class="info" id="OppdagFeil">Om du oppdager feil i regningsmalen ta kontakt med Olli på Messenger.</p>
+        </div>
+            
+        <p id="LittMellomromTakk">Hva skal du få utbetalt for?</p>
+        <label for="Regningsformsen"><input type="radio" name="KellerR" id="Regningsformsen" checked class="NoCSS">Utlegg</label>
+        <label for="Kjøreformsen"><input type="radio" name="KellerR" id="Kjøreformsen" class="NoCSS">Kjøring</label>
+
+        <p>Navn:</p>
+        <input type="text" placeholder="Navn Navnesen" id="NavnInput">
+        <br>
+        
+        <p>Telefonnummer:</p>
+        <input type="text" placeholder="123 45 678" id="TelefonnummerInput" maxlength="8">
+        <br>
+        
+        <p>Arrangement/type utlegg:</p>
+        <input type="text" placeholder="Arrangementnavn" id="ArrangementnavnInput">
+        <p>Dato:</p>
+        <input type="date" id="DatoInput">
+        <br>
+        
+        <p>Enhet:</p>
+        <input type="text" list="Enheter" placeholder="Enhet" id="EnhetInput">
+        <datalist id="Enheter">
+            <option value="Flokk">Flokk</option>
+            <option value="Aspirant">Aspirant</option>
+            <option value="Jentetroppen">Jentetroppen</option>
+            <option value="Guttetroppen">Guttetroppen</option>
+            <option value="Tropp">Tropp</option>
+            <option value="Ledere">Ledere</option>
+        </datalist>
+        <br>
+        
+        <p>Til kontonummer:</p>
+        <input type="text" placeholder="1111 22 33334" id="KontonummerInput" maxlength="11">
+        <br> 
+
+        <div id="RegnigsFormsSide">
+            <p>Beløp</p>
+            <input type="number" placeholder="1234" id="BelopInput">
+            <br>
+
+            <p>Bilde av regning:</p>
+            <input type="file" multiple name="files[]" id="BilderInput" accept="image/jpeg, image/png, image/jpg" class="NoCSS">
+            <br><br>
+        </div>
+
+        <div id="KjøreFormsSide">
+            <form id="KjøreturForm">
+
+                <h3>Legg til en kjøretur</h3>
+                
+                <p class="info">Beløp blir regnet ut automatisk*</p>
+                <p>Navn på/liten beskrivelse av kjøretur:</p>
+                <textarea id="KjørNavnInput" placeholder="Skriv inn navn/beskrivelse"></textarea>
+
+
+                <p>Kjøretøy:</p>
+                <select id="FartøyValg">
+                    <option value="Bil">Bil (også el-bil)</option>
+                    <option value="Motorbåt">Motorbåt</option>
+                    <option value="ATV">Snøscooter og ATV</option>
+                    <option value="Tung motorsykkel">Tung motorsykkel (over 125 ccm)</option>
+                    <option value="Mopedellerlettmotorsykkel">Moped eller lett motorsykkel (opptil 125ccm)</option>
+                    <option value="Andre">Andre</option>
+                </select>
+        
+                <p>Kjørelengde (km):</p>
+                <input type="number" placeholder="Skriv inn strekning i kilometer" value="0" id="StrekningInput">
+        
+                <p>Antall passasjerer (antall ekskludert deg selv):</p>
+                <input type="number" placeholder="antall passasjerer" min="0" value="0" id="PassasjererInput">
+        
+                <p>Annet:</p>
+                <label for="SkogAnleggInput"><input type="checkbox" id="SkogAnleggInput" class="NoCSS">Kjøring på skogs- og anleggsvei</label><br>
+                <label for="EkstraUtstyr"><input type="checkbox" id="EkstraUtstyr" class="NoCSS">For å ta med seg utstyr og materiell (utstyr som på grunn av vekt og/eller beskaffenhet for øvrig ikke er naturlig å plassere i bagasjerom eller på takgrind, f. eks bruk av tilhenger)</label>
+        
+                <br><br>
+                <button type="button" onclick="addTrip()" id="Leggtilkjøreturellerlagreendringerknapp"><span id="buttonText">Legg til kjøretur</span></button>
+                <button type="button" onclick="cancelEdit()" id="cancelButton" style="display: none;">Avbryt</button>
+            
+                <p id="summary"></p>
+            </form>
+        </div>
+
+    </div>
+    <p id="NBTekst"><span id="RedTekst">Husk å laste ned PDF og legge den til som vedlegg i mailen selv, ettersom dette ikke blir gjort automatisk!</span></p>
+    <button id="SendMail">Send til Per Olav</button>
+    <div id="PDF-side">
+        <table>
+            <tr>
+                <th colspan="2"><p>Regning 7.Oslo Kanaljene speidergruppe</p></th>
+            </tr>
+            <tr>
+                <td colspan="2"> Fyll ut skjemaet og konverter det til pdf. Evt. utlegg sendes som vedlegg 
+                        i pdf. Takster for kjøring; 3,50 kr pr km. 1 kr ekstra for passasjer(er) og henger. 
+                        Spesifiser i stor boks under. Utfylt skjema med evt. vedlegg sendes til per.olav.kolberg@gmail.com</td>
+            </tr>
+            <tr>
+                <th><p>Arrangement/type utlegg og dato for dette:</p></th>
+                <th><p>Enhet:</p></th>
+            </tr>
+            <tr>
+                <td id="ArrangementnavnOgDato"></td>
+                <td id="Enhet"></td>
+            </tr>
+            <tr>
+                <th><p>Til kontonummer:</p></th>
+                <th><p>Beløp:</p></th>
+            </tr>
+            <tr>
+                <td id="Kontonummer"></td>
+                <td id="Belop"> </td>
+            </tr>
+            <tr>
+                <th><p>Navn:</p></th>
+                <th><p>Telefonnummer</p></th>
+            </tr>
+            <tr>
+                <td id="Navn"></td>
+                <td id="Telefonnummer"></td>
+            </tr>
+            <tr>
+                <th colspan="2" id="Kvitto"></th>
+            </tr>
+        </table>
+        
+
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.2/html2pdf.bundle.js"></script>
+
+        <script>
+            let SendMailKnapp = document.querySelector("#SendMail")
+            SendMailKnapp.addEventListener("click", SendMail)
+            function SendMail() {
+                let mailtoLink = 'mailto:per.olav.kolberg@gmail.com?subject=Utlegg for '
+                + capitalizeFirstLetter(ArrangementnavnInput.value) + ' ' + formatDate(DatoInput.value) +
+                '&body=Hei, her er regnings PDF-en.%0D%0A%0D%0AMed vennlig hilsen%0D%0A' + NavnInput.value.replace(/\b\w/g, l => l.toUpperCase());
+
+                window.location.href = mailtoLink;
+            }
+
+            let RegningsformsenInput = document.querySelector("#Regningsformsen");
+            let RegningsformsenDiv = document.querySelector("#RegnigsFormsSide");
+
+            let KjøreformsenInput = document.querySelector("#Kjøreformsen");
+            let KjøreformsenDiv = document.querySelector("#KjøreFormsSide");
+
+            RegningsformsenInput.addEventListener("input", VelgUtleggsType);
+            KjøreformsenInput.addEventListener("input", VelgUtleggsType);
+            
+            function VelgUtleggsType(){
+                if (RegningsformsenInput.checked) {
+                    RegningsformsenDiv.style.display = "block"
+                    KjøreformsenDiv.style.display = "none"
+                    Belop.innerHTML = ""
+                    Kvitto.innerHTML = ""
+                    trips = [];
+                    summary = ""
+                    updateSummary();
+                }
+                else {
+                    KjøreformsenDiv.style.display = "block"
+                    RegningsformsenDiv.style.display = "none"
+                    Belop.innerHTML = ""
+                    Kvitto.innerHTML = ""
+                }
+            }
+
+            let NavnInput = document.querySelector("#NavnInput");
+            let Navn = document.querySelector("#Navn");
+        
+            let TelefonnummerInput = document.querySelector("#TelefonnummerInput");
+            let Telefonnummer = document.querySelector("#Telefonnummer");
+        
+            let ArrangementnavnInput = document.querySelector("#ArrangementnavnInput");
+            let DatoInput = document.querySelector("#DatoInput");
+            let ArrangementnavnOgDato = document.querySelector("#ArrangementnavnOgDato");
+        
+            let EnhetInput = document.querySelector("#EnhetInput");
+            let Enhet = document.querySelector("#Enhet");
+        
+            let KontonummerInput = document.querySelector("#KontonummerInput");
+            let Kontonummer = document.querySelector("#Kontonummer");
+        
+            let BelopInput = document.querySelector("#BelopInput");
+            let Belop = document.querySelector("#Belop");
+        
+            let BilderInput = document.querySelector("#BilderInput");
+            let Kvitto = document.querySelector("#Kvitto");
+        
+            // Function to format and update the table dynamically
+            function updateTable() {
+                // Format and capitalize names
+                let formattedNavn = NavnInput.value.replace(/\b\w/g, l => l.toUpperCase());
+                Navn.innerHTML = "<br>" + formattedNavn + "<br><br>";
+
+                // Format and display telephone number
+                let formattedTelefonnummer = TelefonnummerInput.value.replace(/(\d{2})(\d{2})(\d{2})(\d{2})/, "+47 $1 $2 $3 $4");
+                Telefonnummer.innerHTML = "<br>" + formattedTelefonnummer + "<br><br>";
+        
+                // Format and display date as dd.mm.yyyy
+                let formattedDato = formatDate(DatoInput.value);
+                ArrangementnavnOgDato.innerHTML = "<br>" + capitalizeFirstLetter(ArrangementnavnInput.value) + ", " + formattedDato + "<br><br>";
+        
+                Enhet.innerHTML = "<br>" + capitalizeFirstLetter(EnhetInput.value) + "<br><br>";
+                
+                Kontonummer.innerHTML = "<br>" + formatKontonummer(KontonummerInput.value) + "<br><br>";
+
+                Belop.innerHTML = "<br>" + Number(BelopInput.value).toFixed(2)  + " kr<br><br>";
+        
+                // Display uploaded images
+                if (BilderInput.files.length > 0) {
+                    Kvitto.innerHTML = ""; // Clear previous images
+                    for (let i = 0; i < BilderInput.files.length; i++) {
+                        const reader = new FileReader();
+                        reader.onload = function (e) {
+                            const img = document.createElement("img");
+                            img.src = e.target.result;
+
+                            // Set a fixed width for all images
+                            img.style.width = "300px";
+
+                            Kvitto.appendChild(img);
+                        };
+                        reader.readAsDataURL(BilderInput.files[i]);
+                    }
+                }
+        }
+        
+                    // Function to format kontonummer with spaces
+            function formatKontonummer(inputKontonummer) {
+                return inputKontonummer.replace(/(\d{4})(\d{2})(\d{5})/, '$1 $2 $3');
+            }
+
+            // Listen for the input event on form fields
+            // Legg til input-hendelseslyttere for å oppdatere tabellen
+            NavnInput.addEventListener("input", function() {
+            updateTable();
+            resetFarge(NavnInput);
+            });
+
+            TelefonnummerInput.addEventListener("input", function() {
+            updateTable();
+            resetFarge(TelefonnummerInput);
+            });
+
+            ArrangementnavnInput.addEventListener("input", function() {
+            updateTable();
+            resetFarge(ArrangementnavnInput);
+            });
+
+            DatoInput.addEventListener("input", function() {
+            updateTable();
+            resetFarge(DatoInput);
+            });
+
+            EnhetInput.addEventListener("input", function() {
+            updateTable();
+            resetFarge(EnhetInput);
+            });
+
+            KontonummerInput.addEventListener("input", function() {
+            updateTable();
+            resetFarge(KontonummerInput);
+            });
+
+            BelopInput.addEventListener("input", function() {
+            updateTable();
+            resetFarge(BelopInput);
+            });
+
+            BilderInput.addEventListener("input", function() {
+            updateTable();
+            resetFarge(BilderInput);
+            });
+
+            // Felles funksjon for å tilbakestille fargen
+            function resetFarge(inputElement) {
+                inputElement.style.border = "none";
+                inputElement.style.borderBottom = "orangered 1px solid"; // Tilbakestill fargen for det spesifikke input-elementet
+                inputElement.style.backgroundColor = "whitesmoke";
+            }
+        
+            // Function to format date as dd.mm.yyyy
+            function formatDate(inputDate) {
+                const date = new Date(inputDate);
+                const day = date.getDate().toString().padStart(2, '0');
+                const month = (date.getMonth() + 1).toString().padStart(2, '0');
+                const year = date.getFullYear();
+                return `${day}.${month}.${year}`;
+            }
+        
+            // Function to capitalize the first letter of a string
+            function capitalizeFirstLetter(string) {
+                return string.charAt(0).toUpperCase() + string.slice(1);
+            }
+
+
+            var trips = [];
+        var editIndex = -1;
+    
+        function addTrip() {
+            document.getElementById("KjøreturForm").style.border = "none"
+            document.getElementById("KjøreturForm").style.backgroundColor = "white"
+            var vehicle = document.getElementById('FartøyValg').value;
+            var distance = parseFloat(document.getElementById('StrekningInput').value);
+            var passengers = parseFloat(document.getElementById('PassasjererInput').value);
+            var skogAnlegg = document.getElementById('SkogAnleggInput').checked;
+            var ekstraUtstyr = document.getElementById('EkstraUtstyr').checked;
+            var Kjørnavn = document.getElementById('KjørNavnInput').value;
+    
+            if (editIndex !== -1) {
+                // Rediger eksisterende tur
+                trips[editIndex] = {
+                    vehicle: vehicle,
+                    distance: distance,
+                    passengers: passengers,
+                    skogAnlegg: skogAnlegg,
+                    ekstraUtstyr: ekstraUtstyr,
+                    Kjørnavn: Kjørnavn
+                };
+
+                document.getElementById('Leggtilkjøreturellerlagreendringerknapp').style.backgroundImage = "linear-gradient(to bottom right, red , rgb(255, 115, 0))";
+                document.getElementById('KjøreturForm').getElementsByTagName('h3')[0].innerText = "Legg til en kjøretur"; // Tilbakestill overskriften
+    
+                editIndex = -1; // Nullstill redigeringsindeks
+
+                document.getElementById('cancelButton').style.display = 'none';
+
+            } else {
+                // Legg til ny tur
+                trips.push({
+                    vehicle: vehicle,
+                    distance: distance,
+                    passengers: passengers,
+                    skogAnlegg: skogAnlegg,
+                    ekstraUtstyr: ekstraUtstyr,
+                    Kjørnavn: Kjørnavn
+                });
+            }
+            document.getElementById('FartøyValg').value = 'Bil';
+            document.getElementById('StrekningInput').value = 0;
+            document.getElementById('PassasjererInput').value = 0;
+            document.getElementById('SkogAnleggInput').checked = false;
+            document.getElementById('EkstraUtstyr').checked = false;
+            document.getElementById('KjørNavnInput').value = '';
+    
+            document.getElementById('buttonText').innerText = "Legg til kjøretur";
+            document.getElementById('Leggtilkjøreturellerlagreendringerknapp').style.backgroundImage = "linear-gradient(to bottom right, red , rgb(255, 115, 0))";
+            updateSummary();
+        }
+    
+        function editTrip(index) {
+            // Sett redigeringsindeks og fyll inn skjema med eksisterende verdier
+            document.getElementById("KjøreturForm").style.border = "none"
+            document.getElementById("KjøreturForm").style.backgroundColor = "white"
+            editIndex = index;
+            var trip = trips[index];
+            document.getElementById('FartøyValg').value = trip.vehicle;
+            document.getElementById('StrekningInput').value = trip.distance;
+            document.getElementById('PassasjererInput').value = trip.passengers;
+            document.getElementById('SkogAnleggInput').checked = trip.skogAnlegg;
+            document.getElementById('EkstraUtstyr').checked = trip.ekstraUtstyr;
+            document.getElementById('KjørNavnInput').value = trip.Kjørnavn;
+            document.getElementById('buttonText').innerText = "Lagre endringer";
+            document.getElementById('Leggtilkjøreturellerlagreendringerknapp').style.backgroundImage = "none";
+            document.getElementById('Leggtilkjøreturellerlagreendringerknapp').style.backgroundColor= "green";
+    
+            // Endre overskriften til "Redigerer kjøretur x: navn"
+            document.getElementById('KjøreturForm').getElementsByTagName('h3')[0].innerText = "Redigerer kjøretur " + (index + 1) + ": " + trip.Kjørnavn;
+            document.getElementById('cancelButton').style.display = 'inline-block';
+
+    
+            document.getElementById('KjøreturForm').scrollIntoView({ block: 'start',  behavior: 'smooth' });
+        }
+
+        function cancelEdit() {
+            // Nullstill skjema
+            document.getElementById('FartøyValg').value = 'Bil';
+            document.getElementById('StrekningInput').value = 0;
+            document.getElementById('PassasjererInput').value = 0;
+            document.getElementById('SkogAnleggInput').checked = false;
+            document.getElementById('EkstraUtstyr').checked = false;
+            document.getElementById('KjørNavnInput').value = '';
+
+            // Skjul avbryt-knappen
+            document.getElementById('cancelButton').style.display = 'none';
+
+            // Endre overskriften tilbake
+            document.getElementById('KjøreturForm').getElementsByTagName('h3')[0].innerText = "Legg til en kjøretur";
+            document.getElementById('buttonText').innerText = "Legg til kjørtur";
+            document.getElementById('Leggtilkjøreturellerlagreendringerknapp').style.backgroundImage = "linear-gradient(to bottom right, red , rgb(255, 115, 0))";
+
+            // Nullstill redigeringsindeks
+            editIndex = -1;
+        }
+    
+        function deleteTrip(index) {
+            if (index === editIndex) {
+                // Hvis du sletter den turen som for øyeblikket er under redigering, avbryt redigeringen
+                cancelEdit();
+            }
+
+            trips.splice(index, 1);
+            updateSummary();
+
+            // Hvis redigeringen ble avbrutt og slettingen skjedde samtidig, oppdater knappeteksten
+            if (editIndex === -1) {
+                document.getElementById('buttonText').innerText = "Legg til kjøretur";
+            }
+        }
+    
+        function updateSummary() {
+            var summary = "";
+            var PDFsummary = "";
+            var totalAmount = 0;
+    
+            trips.forEach(function(trip, index) {
+                var prisPerKm;
+    
+                switch (trip.vehicle) {
+                    case 'Bil':
+                        prisPerKm = 3.50;
+                        break;
+                    case 'Motorbåt':
+                        prisPerKm = 7.50;
+                        break;
+                    case 'ATV':
+                        prisPerKm = 10.00;
+                        break;
+                    case 'Tung motorsykkel':
+                        prisPerKm = 2.95;
+                        break;
+                    case 'Mopedellerlettmotorsykkel':
+                    case 'Andre':
+                        prisPerKm = 2.00;
+                        break;
+                    default:
+                        prisPerKm = 0.00; // Sett default verdi
+                        break;
+                }
+    
+                var belop = trip.distance * prisPerKm;
+                belop += trip.passengers * trip.distance;
+                belop += trip.skogAnlegg ? trip.distance : 0;
+                belop += trip.ekstraUtstyr ? trip.distance : 0;
+    
+                totalAmount += belop;
+    
+                summary += "<strong>Kjøretur " + (index + 1) + ":</strong> " + trip.Kjørnavn + "<br>";
+                summary += "<strong>Kjøretøy:</strong> " + trip.vehicle + "<br>";
+                summary += "<strong>Distanse:</strong> " + trip.distance + " km<br>";
+                summary += "<strong>Antall passasjerer:</strong> " + trip.passengers + "<br>";
+                summary += "<strong>Annet:</strong> " + (trip.skogAnlegg ? 'kjøring på skogs- og anleggsvei' : '') + (trip.skogAnlegg && trip.ekstraUtstyr ? ', ' : '') + (trip.ekstraUtstyr ? 'Ekstra utstyr' : '') + "<br>";
+                summary += "<strong>Beløp:</strong> " + belop.toFixed(2) + " kroner<br>";
+                summary += "<button type='button' onclick='editTrip(" + index + ")' class='Mindre'>Rediger</button>";
+                summary += "<button type='button' onclick='deleteTrip(" + index + ")' class='Mindre' id='Slett'>Slett</button><br><br>";
+
+                
+                PDFsummary += "<strong>Kjøretur " + (index + 1) + ":</strong> " + trip.Kjørnavn + "<br>";
+                PDFsummary += "<strong>Kjøretøy:</strong> " + trip.vehicle + "<br>";
+                PDFsummary += "<strong>Distanse:</strong> " + trip.distance + " km<br>";
+                PDFsummary += "<strong>Antall passasjerer:</strong> " + trip.passengers + "<br>";
+                PDFsummary += "<strong>Annet:</strong> " + (trip.skogAnlegg ? 'kjøring på skogs- og anleggsvei' : '') + (trip.skogAnlegg && trip.ekstraUtstyr ? ', ' : '') + (trip.ekstraUtstyr ? 'Ekstra utstyr' : '') + "<br>";
+                PDFsummary += "<strong>Beløp:</strong> " + belop.toFixed(2) + " kroner<br><br>";
+            });
+    
+            Belop.innerHTML = "<br>" + (trips.length > 0 ? totalAmount.toFixed(2) : "0.00") + " kr<br><br>"; // Oppdater totalbeløpet utenfor løkken
+
+            Kvitto.innerHTML = PDFsummary + "<strong>Totalt beløp:</strong> " + (trips.length > 0 ? totalAmount.toFixed(2) : "0.00") + " kroner";
+            summary += "<strong>Totalt beløp:</strong> " + (trips.length > 0 ? totalAmount.toFixed(2) : "0.00") + " kroner";
+            document.getElementById('summary').innerHTML = summary;
+        }
+
+
+                    // Funksjon for å generere PDF fra tabellen
+            function generatePDF() {
+                if (RegningsformsenInput.checked) {
+                    let SjekkDisse = ["NavnInput", "TelefonnummerInput", "ArrangementnavnInput", "DatoInput", "EnhetInput", "KontonummerInput", "BelopInput", "BilderInput"];
+                    let Godkjent = true;
+                    for (let i = 0; i < SjekkDisse.length; i++) {         
+                        let inputElement = document.getElementById(SjekkDisse[i]);
+                        if (inputElement.value.trim() === "") {
+                            inputElement.style.border = "red solid 1px";
+                            inputElement.style.backgroundColor = "rgb(255, 220, 220)";
+                            Godkjent = false;
+                        }
+                }
+                if(Godkjent == false) {
+                            alert("Du har ikke fylt ut alle feltene")
+                            return
+                        }
+                }
+
+                else {
+                    let SjekkDisse = ["NavnInput", "TelefonnummerInput", "ArrangementnavnInput", "DatoInput", "EnhetInput", "KontonummerInput"];
+                    let Godkjent = true;
+                    for (let i = 0; i < SjekkDisse.length; i++) {         
+                        let inputElement = document.getElementById(SjekkDisse[i]);
+                        if (inputElement.value.trim() === "") {
+                            inputElement.style.border = "red solid 1px";
+                            inputElement.style.backgroundColor = "rgb(255, 220, 220)";
+                            Godkjent = false;
+                        }
+                    }
+
+                    if(document.getElementById("Belop").innerHTML.trim() === "" || document.getElementById("Belop").innerHTML.trim() === "<br>0.00 kr<br><br>"){
+                        alert("Du har ikke lagt til noen kjøreturer eller lagt til en eller fler med utbetaling 0.00 kroner")
+                        document.getElementById("KjøreturForm").style.border = "solid 1px red"
+                        document.getElementById("KjøreturForm").style.backgroundColor = "rgb(255, 220, 220)";
+                        Godkjent = false;
+                    }
+                
+                if(Godkjent == false) {
+                            alert("Du har ikke fylt ut alle feltene")
+                            return
+                        }
+                }
+
+                // Hent tabellen som HTML
+                const tableHtml = document.getElementById("PDF-side");
+
+                // Konfigurer html2pdf med egendefinerte alternativer
+                const options = {
+                    margin: 10,
+                    filename: 'Utlegg for ' + capitalizeFirstLetter(ArrangementnavnInput.value) + '.pdf',
+                    image: { type: 'jpeg', quality: 0.98 },
+                    html2canvas: { scale: 2 },
+                    jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
+                };
+
+                // Bruk html2pdf for å generere PDF
+                html2pdf(tableHtml, options).then(pdf => {
+                    // Lagre PDF eller vis det i en ny fane
+                    pdf.save();
+                });
+            }
+
+
+            // Lytt til en hendelse, for eksempel en knappklikk, for å generere PDF
+            const generatePDFButton = document.createElement("button");
+            generatePDFButton.innerText = "Last ned PDF";
+            generatePDFButton.addEventListener("click", generatePDF);
+            document.getElementById("Hoved").appendChild(generatePDFButton);
+        </script>
+ 
+    </div>
+</body>
+</html>
